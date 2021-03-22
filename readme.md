@@ -3,12 +3,12 @@
 Library for scraping Google SERP. _Not yet ready for use in production._
 
 ## Example
-```
- import asyncio
+```python
+import asyncio
 
- from simple_serp import get_browser, query_google
+from simple_serp import get_browser, query_google
 
- async def get_query(query):
+async def get_query(query):
     async with get_browser() as browser:
         results = await query_google("query", browser)
 
