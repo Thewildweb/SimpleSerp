@@ -1,4 +1,3 @@
-import datetime
 from typing import Optional, Tuple
 
 from pydantic import BaseModel, HttpUrl

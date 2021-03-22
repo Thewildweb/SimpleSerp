@@ -1,4 +1,3 @@
-import asyncio
 from contextlib import asynccontextmanager
 from urllib.parse import quote_plus
 from typing import Optional
@@ -12,7 +11,7 @@ from .parser import parse_html
 
 
 @asynccontextmanager
-async def get_client(proxy: Optional[dict]=None):
+async def get_client(proxy: Optional[dict] = None):
     async with async_playwright() as playwright:
         firefox = playwright.firefox  # or "firefox" or "webkit".
         browser = await firefox.launch(proxy=proxy)

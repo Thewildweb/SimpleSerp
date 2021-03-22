@@ -1,6 +1,4 @@
-import re
 import logging
-import json
 
 from selectolax.parser import HTMLParser
 
