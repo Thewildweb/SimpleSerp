@@ -13,8 +13,8 @@ from .parser import parse_html
 @asynccontextmanager
 async def get_client(proxy: Optional[dict] = None):
     async with async_playwright() as playwright:
-        firefox = playwright.firefox  # or "firefox" or "webkit".
-        browser = await firefox.launch(proxy=proxy)
+        chromium = playwright.chromium  # or "firefox" or "webkit".
+        browser = await chromium.launch(proxy=proxy)
         yield browser
 
         await browser.close()
@@ -47,9 +47,9 @@ async def query_google(
             cont = await get_page(g_url, browser)
         except Exception as e:
             if retries > 0:
-                logging.warning(f"Error with: {g_url}")
+                logging.warning(f"Error with: {g_url}. Error {e}")
                 retries -= 1
-                cont = await query_google(query, browser, retries)
+                cont = await query_google(query, browser, retries=retries)
             else:
                 logging.warning(
                     f"Maximum retries for querie: {query}. Offset: {offset}. Url: {g_url}. Error: {e}"
