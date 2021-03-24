@@ -27,7 +27,7 @@ results = asyncio.run(get_query("example query"))
 
 - Replace the google_client function with a GoogleClient class
 - Dynamicly create new context after a failed query
-- Dynamicly get a new proxy after a failed query
+- Dynamicly get a new proxy after a failed queryl
 - Write tests
 - Parse Video
 - Parse Images
