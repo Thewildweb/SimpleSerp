@@ -10,6 +10,9 @@ from .models import Query, Serp
 from .parser import parse_html
 
 
+# TODO make a Client class for Playwright and AIOhttp
+
+
 @asynccontextmanager
 async def get_client(proxy: Optional[dict] = None):
     async with async_playwright() as playwright:
@@ -61,6 +64,8 @@ async def query_google(
         except Exception as e:
             logging.warning(f"Error in parsing")
             break
+
+        # TODO Redo failed parsed
 
         serp = Serp(
             serp_url=g_url,
