@@ -9,7 +9,7 @@ import asyncio
 from simple_serp import get_browser, query_google
 
 async def get_query(query):
-    async with get_browser() as browser:
+    async with get_client() as browser:
         results = await query_google("query", browser)
 
     return results

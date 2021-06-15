@@ -10,21 +10,33 @@ from .models import Query, Serp
 from .parser import parse_html
 
 
-# TODO make a Client class for Playwright and AIOhttp
-
-
 @asynccontextmanager
-async def get_client(proxy: Optional[dict] = None):
+async def get_client():
     async with async_playwright() as playwright:
         chromium = playwright.chromium  # or "firefox" or "webkit".
-        browser = await chromium.launch(proxy=proxy)
+        browser = await chromium.launch()
         yield browser
 
         await browser.close()
 
 
-async def get_page(url: str, browser: Browser) -> str:
-    page = await browser.new_page()
+async def get_page(
+    url: str,
+    browser: Browser,
+    proxy: Optional[dict] = None,
+    locale: Optional[str] = None,
+    user_agent: Optional[str] = None,
+) -> str:
+    context_dict = {}
+    if proxy:
+        context_dict["proxy"] = proxy
+    if locale:
+        context_dict["locale"] = locale
+    if user_agent:
+        context_dict["user_agent"] = user_agent
+
+    context = await browser.new_context(**context_dict)
+    page = await context.new_page()
     await page.goto(url)
     cont = await page.content()
     await page.close()
