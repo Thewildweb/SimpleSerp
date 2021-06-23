@@ -16,6 +16,11 @@ class Adword(BaseModel):
     description: Optional[str]
 
 
+class Review(BaseModel):
+    grade: float
+    nr_reviews: int
+
+
 class MapsSidebar(BaseModel):
     title: str
     website: Optional[HttpUrl]
@@ -23,11 +28,14 @@ class MapsSidebar(BaseModel):
     address: Optional[str]
     phone: Optional[str]
     gesloten: Optional[str]
+    services: Optional[list[str]]
+    review: Optional[Review]
     # voor restaurants
     checks: Optional[list[Tuple[str, bool]]]
     bestellen: Optional[list[str]]
+    restaurant_reserveren: Optional[list[dict[str, str]]]
     # voor hotels
-    hoteldvoorzieningen: Optional[list[str]]
+    hotel_page: Optional[str]
 
 
 class Serp(BaseModel):

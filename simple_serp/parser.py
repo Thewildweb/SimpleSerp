@@ -86,7 +86,8 @@ def get_maps_sidebar(tree):
 
     # get the website
     if website := know_p.css_first("a.ab_button[href]"):
-        return_dict["website"] = website.attributes.get("href")
+        if website.attributes.get("href") != "#":
+            return_dict["website"] = website.attributes.get("href")
 
     # get the address
     adresses = know_p.css("div[data-local-attribute='d3adr']")
@@ -108,15 +109,54 @@ def get_maps_sidebar(tree):
             the_bool = bool(check.css_first("svg.GmYtSd"))
             return_dict["checks"].append((check.attributes.get("aria-label"), the_bool))
 
+    if rest_reserveren := know_p.css_first(
+        "div[data-attrid='kc:/local:table_reservations']"
+    ):
+        return_dict["restaurant_reserveren"] = []
+        for ahref in rest_reserveren.css("a[href]"):
+            return_dict["restaurant_reserveren"].append(
+                {"title": ahref.text(strip=True), "url": ahref.attributes.get("href")}
+            )
+
     if bestellen := know_p.css_first("div[data-attrid$='order_food']"):
         return_dict["bestellen"] = []
         bestel_list = bestellen.css("a[href]")
         for bst_a in bestel_list:
             return_dict["bestellen"].append(bst_a.attributes.get("href"))
 
+    if service_elem := know_p.css_first(
+        "div[data-attrid='kc:/local:business_availability_modes']"
+    ):
+        service_elem.strip_tags(["span"])
+        split_str = [item.strip() for item in service_elem.text().split("·") if item]
+        return_dict["services"] = split_str
+
+    if review_elem := know_p.css_first(
+        "div[data-attrid='kc:/collection/knowledge_panels/local_reviewable:star_score']"
+    ):
+        grade = review_elem.css_first("span").text()
+        grade = grade.replace(",", ".")
+        nr_reviews_string = review_elem.css_first("a").text()
+        nr_reviews = "".join([token for token in nr_reviews_string if token.isdigit()])
+        return_dict["review"] = {"grade": grade, "nr_reviews": nr_reviews}
+
+    try:
+        for a_href in know_p.css("a[href]"):
+            if a_href.attributes.get(
+                "href"
+            ) and "/travel/hotels/entity/" in a_href.attributes.get("href"):
+                split_path = a_href.attributes.get("href").split("/")
+                hotel_path = "/".join(split_path[:5])
+                return_dict["hotel_page"] = hotel_path
+                break
+    except Exception:
+        pass
+
+    print(return_dict)
     try:
         return MapsSidebar.parse_obj(return_dict)
     except Exception as e:
+        print(e)
         logging.info(f"Error parsing maps sidebar. {e}")
 
 
