@@ -52,11 +52,10 @@ async def get_page(
     if user_agent:
         context_dict["user_agent"] = user_agent
 
-    captcha_route = False
     context = await browser.new_context(**context_dict)
     page = await context.new_page()
 
-    # await page.route("**/*", routing)
+    await page.route("**/*", routing)
 
     try:
         await page.goto(url)
@@ -91,11 +90,16 @@ async def query_google(
     user_agent: Optional[str] = None,
     max_pages: int = 1,
     retries: int = 3,
+    city: str = None,
+    uule: str = None,
 ) -> str:
     return_query = Query(query=query, serps=[])
     # create query
     query = quote_plus(query)
     g_url = f"https://www.google.com/search?q={query}"
+
+    if uule:
+        g_url += uule
 
     for i in range(max_pages):
         offset = i * 10
