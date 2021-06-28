@@ -130,10 +130,6 @@ async def query_google(
                 )
                 break
 
-        filename = f"code-{datetime.datetime.utcnow().timestamp()}.html"
-        with open(filename, "w") as html_file:
-            html_file.write(cont)
-
         try:
             parsed = parse_html(cont)
         except Exception as e:
