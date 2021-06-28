@@ -32,7 +32,7 @@ class MapsSidebar(BaseModel):
     review: Optional[Review]
     # voor restaurants
     checks: Optional[list[Tuple[str, bool]]]
-    bestellen: Optional[list[str]]
+    bestellen: Optional[list[dict]]
     restaurant_reserveren: Optional[list[dict[str, str]]]
     # voor hotels
     hotel_page: Optional[str]

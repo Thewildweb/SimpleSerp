@@ -122,7 +122,9 @@ def get_maps_sidebar(tree):
         return_dict["bestellen"] = []
         bestel_list = bestellen.css("a[href]")
         for bst_a in bestel_list:
-            return_dict["bestellen"].append(bst_a.attributes.get("href"))
+            return_dict["bestellen"].append(
+                {"title": bst_a, "url": bst_a.attributes.get("href")}
+            )
 
     if service_elem := know_p.css_first(
         "div[data-attrid='kc:/local:business_availability_modes']"
@@ -138,7 +140,7 @@ def get_maps_sidebar(tree):
         grade = grade.replace(",", ".")
         nr_reviews_string = review_elem.css_first("a").text()
         nr_reviews = "".join([token for token in nr_reviews_string if token.isdigit()])
-        return_dict["review"] = {"grade": grade, "nr_reviews": nr_reviews}
+        return_dict["review"] = {"grade": float(grade), "nr_reviews": int(nr_reviews)}
 
     try:
         for a_href in know_p.css("a[href]"):
@@ -152,11 +154,9 @@ def get_maps_sidebar(tree):
     except Exception:
         pass
 
-    print(return_dict)
     try:
         return MapsSidebar.parse_obj(return_dict)
     except Exception as e:
-        print(e)
         logging.info(f"Error parsing maps sidebar. {e}")
 
 
