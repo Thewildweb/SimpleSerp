@@ -1,6 +1,5 @@
 import csv
 import base64
-import os
 from typing import Optional
 
 
@@ -8,10 +7,9 @@ class UuleGenerator:
     def __init__(self):
         self._geo_dict = self._create_city_geos()
 
-    def _create_city_geos(self):
+    def _create_city_geos(self, geo_path):
         len_nr_dict = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789- ABCDEFGHIJKLMOPQRSTUVWXYZ"
-        file_dir = os.path.dirname(os.path.realpath(__file__))
-        with open(f"{file_dir}/geotargets.csv", "r") as geo_file:
+        with open(geo_path, "r") as geo_file:
             geo_dict = {}
             reader = csv.DictReader(geo_file)
             for row in reader:
